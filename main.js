@@ -3,6 +3,7 @@ const fileType = require('file-type');
 const fs = require('fs');
 const path = require('path');
 const readChunk = require('read-chunk');
+const uuid = require('uuid/v4');
 const {
   app,
   BrowserWindow,
@@ -33,19 +34,30 @@ function isAudio(file) {
 }
 
 function saveFile(source) {
-  return new Promise((() => {
-    const fileName = path.basename(source);
-    const rd = fs.createReadStream(source);
-    const wr = fs.createWriteStream(`${audioPath}/${fileName}`);
-    rd.pipe(wr);
-  }));
+  if (source && source.length > 0) {
+    source.forEach(singlePath => new Promise((() => {
+      const uid = uuid();
+      const fileName = path.basename(singlePath);
+      const rd = fs.createReadStream(singlePath);
+      const wr = fs.createWriteStream(`${audioPath}/${uid}-${fileName}`);
+      rd.pipe(wr);
+    })));
+  }
+}
+
+function selectFile() {
+  return dialog.showOpenDialog({
+    filters: [{
+      name: 'Audio',
+      extensions: ['mp3', 'wav', 'flac', 'aif', 'ogg'],
+    }],
+    properties: ['openFile', 'multiSelections'],
+  });
 }
 
 ipcMain.on('importFile', (event, arg) => {
-  dialog.showOpenDialog({
-    properties: ['openFile', 'multiSelections'],
-  });
-  // saveFile();
+  const filePath = selectFile();
+  saveFile(filePath);
 });
 
 
