@@ -1,8 +1,6 @@
 const Config = require('electron-config');
-const fileType = require('file-type');
 const fs = require('fs');
 const path = require('path');
-const readChunk = require('read-chunk');
 const uuid = require('uuid/v4');
 const {
   app,
@@ -18,19 +16,6 @@ const configPath = path.dirname(config.path);
 const audioPath = `${configPath}/Audio`;
 if (!fs.existsSync(audioPath)) {
   fs.mkdirSync(audioPath);
-}
-
-function getFileType(file) {
-  const buffer = readChunk.sync(file, 0, 262);
-  return fileType(buffer);
-}
-
-function isAudio(file) {
-  try {
-    return getFileType(file).mime.match(/^audio\//);
-  } catch (e) {
-    return false;
-  }
 }
 
 function saveFile(source) {
