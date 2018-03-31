@@ -1,0 +1,53 @@
+{
+  "name": "gravity",
+  "productName": "Gravity",
+  "version": "0.0.1",
+  "description": "a modern soundboard app for dank drops",
+  "license": "MIT",
+  "repository": "RiskyMcdanger/gravity",
+  "author": {
+    "name": "Risky McDanger",
+    "email": "riskymcdanger@gmail.com",
+    "url": "null"
+  },
+  "scripts": {
+    "test": "xo",
+    "start": "electron .",
+    "win32": "electron-packager . gravity --platform=win32 --arch=ia32",
+    "win64": "electron-packager . gravity --platform=win32 --arch=x64",
+    "linux32": "electron-packager . gravity --platform=linux --arch=ia32",
+    "linux64": "electron-packager . gravity --platform=linux --arch=x64",
+    "osx": "electron-packager . gravity --platform=darwin --arch=x64",
+    "build": "electron-packager . --out=dist --asar --overwrite --all"
+  },
+  "main": "main.js",
+  "files": [
+    "main.js",
+    "index.js",
+    "index.html",
+    "index.css"
+  ],
+  "keywords": [
+    "electron-app",
+    "electron"
+  ],
+  "dependencies": {
+    "animate.css": "^3.6.1",
+    "bootstrap": "^4.0.0",
+    "electron": "^1.8.4",
+    "electron-config": "^1.0.0",
+    "electron-debug": "^1.5.0",
+    "electron-updater": "^2.21.4",
+    "file-saver": "^1.3.8",
+    "file-type": "7.6.0",
+    "fs": "^0.0.1-security",
+    "materialize-css": "^1.0.0-beta",
+    "read-chunk": "2.1.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^11.2.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0"
+  }
+}
