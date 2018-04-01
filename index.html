@@ -2,30 +2,40 @@
 
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	<link rel="stylesheet" href="./index.css">
+	<link rel="stylesheet" href="./node_modules/materialize-css/dist/css/materialize.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 
 <body class="black">
 	<nav>
 		<div class="nav-wrapper purple">
 			<ul id="nav-mobile" class="left">
 				<li>
-					<a class="waves-effect waves-light btn-large" onclick="importFile()">Add</a>
+					<a class="waves-effect waves-light btn-large" onclick="ipcRenderer.send('importFile')">Add</a>
 				</li>
 			</ul>
 			<a class="brand-logo center">gravity</a>
 			<ul id="nav-mobile" class="right">
 				<li>
-					<a class="waves-effect waves-light btn-large" onclick="quit()">Quit</a>
+					<a class="waves-effect waves-light btn-large" onclick="ipcRenderer.send('quit')">Quit</a>
 				</li>
 			</ul>
 		</div>
 	</nav>
 
-	<div id="buttons">
+	<div id="container" class="row">
 	</div>
-	<script src="./index.js"></script>
+
+	<script src="./node_modules/materialize-css/dist/js/materialize.min.js "></script>
+	<script src="./index.js "></script>
+	<script>
+		var elem = document.querySelector('.modal');
+		var instance = M.Modal.init(elem, {});
+
+	</script>
+
 </body>
 
 </html>

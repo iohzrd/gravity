@@ -8,7 +8,6 @@ const {
   ipcMain,
   dialog,
 } = require('electron');
-require('electron-debug')();
 
 let mainWindow;
 const config = new Config();
@@ -23,9 +22,25 @@ function saveFile(source) {
     source.forEach(singlePath => new Promise((() => {
       const uid = uuid();
       const fileName = path.basename(singlePath);
+      const ext = path.extname(singlePath);
+      const fileNameNoExt = fileName.substring(0, fileName.lastIndexOf('.'));
+      const newPath = `${audioPath}/${uid}${ext}`;
       const rd = fs.createReadStream(singlePath);
-      const wr = fs.createWriteStream(`${audioPath}/${uid}-${fileName}`);
-      rd.pipe(wr);
+      const wr = fs.createWriteStream(newPath);
+      const root = config.get();
+      if (root.files === undefined) {
+        root.files = {};
+      }
+      root.files[uid] = {
+        name: fileNameNoExt,
+        path: newPath,
+        rate: 1.0,
+        uid,
+        volume: 1.0,
+      };
+      if (rd.pipe(wr)) {
+        config.set(root);
+      }
     })));
   }
 }
@@ -34,17 +49,24 @@ function selectFile() {
   return dialog.showOpenDialog({
     filters: [{
       name: 'Audio',
-      extensions: ['mp3', 'wav', 'flac', 'aif', 'ogg'],
+      extensions: ['aif', 'flac', 'm4a', 'mp3', 'ogg', 'wav'],
     }],
     properties: ['openFile', 'multiSelections'],
   });
 }
 
-ipcMain.on('importFile', (event, arg) => {
+ipcMain.on('dragDropFiles', (event, arg) => {
+  saveFile(arg);
+});
+
+ipcMain.on('importFile', () => {
   const filePath = selectFile();
   saveFile(filePath);
 });
 
+ipcMain.on('quit', () => {
+  app.quit();
+});
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
@@ -57,9 +79,5 @@ app.on('ready', () => {
 });
 
 app.on('window-all-closed', () => {
-  app.quit();
-});
-
-ipcMain.on('quit', () => {
   app.quit();
 });
