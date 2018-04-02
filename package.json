@@ -11,20 +11,19 @@
     "url": "null"
   },
   "scripts": {
-    "start": "electron .",
-    "win32": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=ia32",
-    "win64": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64",
+    "all": "electron-packager . --out=dist --asar --overwrite --all",
     "linux32": "electron-packager . --out=dist --asar --overwrite --platform=linux --arch=ia32",
     "linux64": "electron-packager . --out=dist --asar --overwrite --platform=linux --arch=x64",
     "osx": "electron-packager . --out=dist --asar --overwrite --platform=darwin --arch=x64",
-    "build": "electron-packager . --out=dist --asar --overwrite --all"
+    "start": "electron .",
+    "win32": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=ia32",
+    "win64": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64"
   },
   "main": "main.js",
   "files": [
     "main.js",
     "index.js",
-    "index.html",
-    "index.css"
+    "index.html"
   ],
   "keywords": [
     "audio",
