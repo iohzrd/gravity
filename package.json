@@ -21,9 +21,10 @@
   },
   "main": "main.js",
   "files": [
-    "main.js",
+    "index.css",
+    "index.html",
     "index.js",
-    "index.html"
+    "main.js"
   ],
   "keywords": [
     "audio",
@@ -34,7 +35,6 @@
     "drag-drop": "^2.13.2",
     "electron": "^1.8.4",
     "electron-config": "^1.0.0",
-    "electron-updater": "^2.21.4",
     "fs": "^0.0.1-security",
     "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-beta",
