@@ -1,7 +1,7 @@
 {
   "name": "gravity",
   "productName": "Gravity",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "a modern soundboard app for dank drops",
   "license": "MIT",
   "repository": "RiskyMcdanger/gravity",
@@ -10,14 +10,46 @@
     "email": "riskymcdanger@gmail.com",
     "url": "null"
   },
+  "build": {
+    "appId": "com.riskymcdanger.gravity",
+    "publish": [{
+      "provider": "generic",
+      "url": "https://example.com/updates"
+    }],
+    "linux": {
+      "target": [{
+        "target": "deb",
+        "arch": [
+          "x64"
+        ]
+      }]
+    },
+    "mac": {
+      "target": [{
+        "target": "dmg",
+        "arch": [
+          "x64"
+        ]
+      }]
+    },
+    "win": {
+      "target": [{
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }],
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "perMachine": true
+    }
+  },
   "scripts": {
-    "all": "electron-packager . --out=dist --asar --overwrite --all",
-    "linux32": "electron-packager . --out=dist --asar --overwrite --platform=linux --arch=ia32",
-    "linux64": "electron-packager . --out=dist --asar --overwrite --platform=linux --arch=x64",
-    "osx": "electron-packager . --out=dist --asar --overwrite --platform=darwin --arch=x64",
-    "start": "electron .",
-    "win32": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=ia32",
-    "win64": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64"
+    "build-linux": "build --linux",
+    "build-osx": "build --osx",
+    "build-win": "build --win",
+    "start": "electron ."
   },
   "main": "main.js",
   "files": [
@@ -33,7 +65,6 @@
   ],
   "dependencies": {
     "drag-drop": "^2.13.2",
-    "electron": "^1.8.4",
     "electron-config": "^1.0.0",
     "fs": "^0.0.1-security",
     "material-design-icons": "^3.0.1",
@@ -43,7 +74,8 @@
     "webpack": "^4.4.1"
   },
   "devDependencies": {
-    "electron-packager": "^11.2.0",
+    "electron": "^1.8.4",
+    "electron-builder": "^20.8.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.10.0"
