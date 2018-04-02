@@ -61,25 +61,30 @@ function updateTime(audio) {
 
 function importConfig(object) {
   // Card Structure
-  const column = document.createElement('div');
-  column.className = 'col s2';
+  const col = document.createElement('div');
+  col.className = 'col s2';
+  col.id = `col-${object.uid}`;
   const card = document.createElement('div');
   card.className = 'card blue-grey darken-1';
-  const modalTrigger = document.createElement('i');
+  card.id = `card-${object.uid}`;
+  const modalTrigger = document.createElement('a');
   modalTrigger.className = 'modal-trigger material-icons right';
+  modalTrigger.href = `#modal-${object.uid}`;
+  modalTrigger.id = `modal-trigger-${object.uid}`;
   modalTrigger.innerText = 'settings';
-  modalTrigger.setAttribute('data-target', 'modal1');
+  //   modalTrigger.setAttribute('data-target', `modal-${object.uid}`);
   const cardContent = document.createElement('div');
   cardContent.className = 'card-content white-text';
+  cardContent.id = `card-content-${object.uid}`;
   const cardTitle = document.createElement('span');
   cardTitle.className = 'card-title';
-  cardTitle.innerText = 'Title';
+  cardTitle.id = `card-title-${object.uid}`;
+  cardTitle.innerText = object.name;
   const progress = document.createElement('div');
   progress.className = 'progress';
+  progress.id = `progress-${object.uid}`;
   const determinate = document.createElement('div');
-
   determinate.id = `determinate-${object.uid}`;
-
   determinate.className = 'determinate';
   determinate.style.width = '0%';
   cardContent.appendChild(cardTitle);
@@ -87,23 +92,28 @@ function importConfig(object) {
   card.appendChild(modalTrigger);
   card.appendChild(cardContent);
   card.appendChild(progress);
-  column.appendChild(card);
+  col.appendChild(card);
 
   // Modal Structure
   const modal = document.createElement('div');
-  modal.id = 'modal1';
   modal.className = 'modal';
+  modal.id = `modal-${object.uid}`;
   const modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
+  modalContent.id = `modal-content-${object.uid}`;
   const modalHeader = document.createElement('h4');
-  modalHeader.innerText = 'Modal Header';
+  modalHeader.id = `modal-header-${object.uid}`;
+  modalHeader.innerText = object.name;
   const modalText = document.createElement('p');
-  modalText.innerText = 'A bunch of text';
+  modalText.id = `modal-text-${object.uid}`;
+  modalText.innerText = object.uid;
   const modalFooter = document.createElement('div');
   modalFooter.className = 'modal-footer';
+  modalFooter.id = `modal-footer-${object.uid}`;
   const modalAction = document.createElement('a');
-  modalAction.href = '#!';
   modalAction.className = 'modal-action modal-close waves-effect waves-green btn-flat';
+  modalAction.href = '#!';
+  modalAction.id = `modal-action-${object.uid}`;
   modalAction.innerText = 'Save';
   modalContent.appendChild(modalHeader);
   modalContent.appendChild(modalText);
@@ -111,14 +121,15 @@ function importConfig(object) {
   modal.appendChild(modalContent);
   modal.appendChild(modalFooter);
 
-  card.audio = new Audio();
-  card.audio.id = object.uid;
-  card.audio.src = object.path;
-  card.setAttribute('onclick', 'playPause(this)');
-  card.audio.setAttribute('ontimeupdate', 'updateTime(this)');
+  cardContent.audio = new Audio();
+  cardContent.audio.id = `${object.uid}`;
+  cardContent.audio.src = object.path;
+  cardContent.setAttribute('onclick', 'playPause(this)');
+  cardContent.audio.setAttribute('ontimeupdate', 'updateTime(this)');
 
-  document.getElementById('container').appendChild(column);
+  document.getElementById('container').appendChild(col);
   document.getElementById('container').appendChild(modal);
+  M.Modal.init(modal, {});
 }
 
 files = config.store.files;
