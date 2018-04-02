@@ -23,8 +23,6 @@ $ npm run build-osx
 $ npm run build-win
 ```
 
-Builds the app for macOS, Linux, and Windows, using [electron-packager](https://github.com/electron-userland/electron-packager).
-
 ### TODO
 
 * Add master volume controls
