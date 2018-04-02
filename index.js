@@ -14,6 +14,7 @@ function dragDropFiles(files) {
 }
 
 dragDrop('body', {
+
   onDrop(files, pos) {
     console.log(files);
     const arr = [];
@@ -28,12 +29,20 @@ dragDrop('body', {
   },
   onDragEnter() {
     console.log('dragDrop.onDragEnter');
+    const elem = document.getElementById('modal-drag-drop');
+    M.Modal.init(elem, {});
+    const instance = M.Modal.getInstance(elem);
+    instance.open();
   },
   onDragOver() {
     console.log('dragDrop.onDragOver');
   },
   onDragLeave() {
     console.log('dragDrop.onDragLeave');
+    const elem = document.getElementById('modal-drag-drop');
+    const instance = M.Modal.getInstance(elem);
+    instance.close();
+    instance.destroy();
   },
 });
 
@@ -46,7 +55,7 @@ function playPause(element) {
   }
 }
 
-function updateTime(audio) {
+function updateProgress(audio) {
   console.log(audio);
   const uid = audio.id;
   const percent = Math.floor((audio.currentTime / audio.duration) * 100);
@@ -72,7 +81,6 @@ function importConfig(object) {
   modalTrigger.href = `#modal-${object.uid}`;
   modalTrigger.id = `modal-trigger-${object.uid}`;
   modalTrigger.innerText = 'settings';
-  //   modalTrigger.setAttribute('data-target', `modal-${object.uid}`);
   const cardContent = document.createElement('div');
   cardContent.className = 'card-content white-text';
   cardContent.id = `card-content-${object.uid}`;
@@ -121,11 +129,12 @@ function importConfig(object) {
   modal.appendChild(modalContent);
   modal.appendChild(modalFooter);
 
+  // Audio element
   cardContent.audio = new Audio();
   cardContent.audio.id = `${object.uid}`;
   cardContent.audio.src = object.path;
   cardContent.setAttribute('onclick', 'playPause(this)');
-  cardContent.audio.setAttribute('ontimeupdate', 'updateTime(this)');
+  cardContent.audio.setAttribute('ontimeupdate', 'updateProgress(this)');
 
   document.getElementById('container').appendChild(col);
   document.getElementById('container').appendChild(modal);

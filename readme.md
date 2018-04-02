@@ -1,6 +1,6 @@
 # gravity
 
-> a modern soundboard app for dank drops
+> a soundboard app written using electron
 
 
 ## Dev

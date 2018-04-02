@@ -34,9 +34,9 @@ function saveFile(source) {
       root.files[uid] = {
         name: fileNameNoExt,
         path: newPath,
-        rate: 1.0,
+        rate: 0.99,
         uid,
-        volume: 1.0,
+        volume: 0.99,
       };
       if (rd.pipe(wr)) {
         config.set(root);

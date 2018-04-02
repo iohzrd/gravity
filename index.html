@@ -8,23 +8,43 @@
 
 
 <body class="black">
-	<nav>
-		<div class="nav-wrapper purple">
-			<ul id="nav-mobile" class="left">
-				<li>
-					<a class="waves-effect waves-light btn-large" onclick="ipcRenderer.send('importFile')">Add</a>
-				</li>
-			</ul>
-			<a class="brand-logo center">gravity</a>
-			<ul id="nav-mobile" class="right">
-				<li>
-					<a class="waves-effect waves-light btn-large" onclick="ipcRenderer.send('quit')">Quit</a>
-				</li>
-			</ul>
-		</div>
-	</nav>
+	<div class="navbar-fixed">
+		<nav>
+			<div class="nav-wrapper">
+				<ul id="nav-mobile" class="left">
+					<li>
+						<a class="waves-effect waves-light btn-large  blue-grey darken-1" onclick="ipcRenderer.send('importFile')">Add</a>
+					</li>
+					<li>
+						<form>
+							<div class="input-field">
+								<input id="search" type="search" required>
+								<label class="label-icon" for="search">
+									<i class="material-icons">search</i>
+								</label>
+								<i class="material-icons">close</i>
+							</div>
+						</form>
+					</li>
+				</ul>
+				<a class="brand-logo center">gravity</a>
+				<ul id="nav-mobile" class="right">
+					<li>
+						<a class="waves-effect waves-light btn-large blue-grey darken-1" onclick="ipcRenderer.send('quit')">Quit</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
 
 	<div id="container" class="row">
+	</div>
+
+	<!-- DragDrop Modal Structure -->
+	<div id="modal-drag-drop" class="modal">
+		<div class="modal-content center">
+			<h4>Drop audio files</h4>
+		</div>
 	</div>
 
 	<script src="./node_modules/materialize-css/dist/js/materialize.min.js "></script>
