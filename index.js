@@ -13,7 +13,7 @@ function dragDropFiles(files) {
   ipcRenderer.send('dragDropFiles', files);
 }
 
-dragDrop('body', {
+dragDrop('div.row', {
 
   onDrop(files, pos) {
     console.log(files);
@@ -68,7 +68,7 @@ function updateProgress(audio) {
 }
 
 
-function importConfig(object) {
+function addElement(object) {
   // Card Structure
   const col = document.createElement('div');
   col.className = 'col s2';
@@ -106,28 +106,55 @@ function importConfig(object) {
   const modal = document.createElement('div');
   modal.className = 'modal';
   modal.id = `modal-${object.uid}`;
+
   const modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
   modalContent.id = `modal-content-${object.uid}`;
+  modal.appendChild(modalContent);
+
   const modalHeader = document.createElement('h4');
   modalHeader.id = `modal-header-${object.uid}`;
   modalHeader.innerText = object.name;
+  modalContent.appendChild(modalHeader);
+
   const modalText = document.createElement('p');
   modalText.id = `modal-text-${object.uid}`;
   modalText.innerText = object.uid;
+  modalContent.appendChild(modalText);
+
+  const modalVolumeSlider = document.createElement('div');
+  modalVolumeSlider.id = `modal-volume-slider-${object.uid}`;
+  noUiSlider.create(modalVolumeSlider, {
+    start: 1.00,
+    step: 0.01,
+    behaviour: 'drag',
+    connect: [true, false],
+    range: {
+      min: 0.00,
+      max: 1.00,
+    },
+  });
+
+  modalContent.appendChild(modalVolumeSlider);
+
+  const modalItemDelete = document.createElement('a');
+  modalItemDelete.id = `modal-delete-item-${object.uid}`;
+  modalItemDelete.innerText = 'Delete';
+  modalItemDelete.className = 'btn blue-grey darken-1 waves-effect waves-light';
+  modalContent.appendChild(modalItemDelete);
+
   const modalFooter = document.createElement('div');
   modalFooter.className = 'modal-footer';
   modalFooter.id = `modal-footer-${object.uid}`;
+  modal.appendChild(modalFooter);
+
   const modalAction = document.createElement('a');
   modalAction.className = 'modal-action modal-close waves-effect waves-green btn-flat';
   modalAction.href = '#!';
   modalAction.id = `modal-action-${object.uid}`;
   modalAction.innerText = 'Save';
-  modalContent.appendChild(modalHeader);
-  modalContent.appendChild(modalText);
   modalFooter.appendChild(modalAction);
-  modal.appendChild(modalContent);
-  modal.appendChild(modalFooter);
+
 
   // Audio element
   cardContent.audio = new Audio();
@@ -136,20 +163,19 @@ function importConfig(object) {
   cardContent.setAttribute('onclick', 'playPause(this)');
   cardContent.audio.setAttribute('ontimeupdate', 'updateProgress(this)');
 
-  document.getElementById('container').appendChild(col);
-  document.getElementById('container').appendChild(modal);
+  document.getElementById('cards').appendChild(col);
+  document.getElementById('modals').appendChild(modal);
   M.Modal.init(modal, {});
 }
 
 files = config.store.files;
 for (const key in files) {
   const element = files[key];
-  importConfig(element);
+  addElement(element);
 }
 
 
-const container = document.getElementById('container');
-const sortable = Sortable.create(container, {
+const cards = document.getElementById('cards');
+Sortable.create(cards, {
   animation: 150,
 });
-console.log(sortable);
