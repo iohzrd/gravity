@@ -26,6 +26,25 @@ function deleteEntry(index) {
   refresh();
 }
 
+function saveEntry(uid) {
+  console.log(uid);
+  const modalName = document.getElementById(`modal-name-${uid}`);
+  const modalRate = document.getElementById(`modal-rate-value-${uid}`);
+  const modalVolume = document.getElementById(`modal-volume-value-${uid}`);
+  const cardTitle = document.getElementById(`card-title-${uid}`);
+  const root = config.get();
+  root.cards.forEach((element) => {
+    if (element.uid === uid) {
+      const index = root.cards.indexOf(element);
+      cardTitle.innerText = modalName.value;
+      root.cards[index].name = modalName.value;
+      root.cards[index].rate = Number(modalRate.innerText);
+      root.cards[index].volume = Number(modalVolume.innerText);
+    }
+  });
+  config.set(root);
+}
+
 function print(arg) {
   ipcRenderer.send('print', arg);
 }

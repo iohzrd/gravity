@@ -1,15 +1,21 @@
-<div class="modal" id="modal-#{index}">
-    <div class="modal-content" id="modal-content-#{index}">
-        <h4 id="modal-header-#{index}">#{val.name}</h4>
+<div class="modal" id="modal-#{val.uid}">
+    <div class="modal-content" id="modal-content-#{val.uid}">
+        <div class="input-field">
+            <i class="material-icons prefix">mode_edit</i>
+            <textarea id="modal-name-#{val.uid}" class="materialize-textarea">#{val.name}</textarea>
+            <label for="modal-name-#{val.uid}">Label</label>
+        </div>
         <label>
             <span>Volume</span>
-            <div id="modal-volume-slider-#{index}"></div>
-            <span id="modal-volume-value-#{index}"></span>
+            <div id="modal-volume-slider-#{val.uid}"></div>
+            <span id="modal-volume-value-#{val.uid}"></span>
             script(type='text/javascript').
-                var volumeSlider = document.getElementById('modal-volume-slider-#{index}')
-                var volumeValue = document.getElementById('modal-volume-value-#{index}')
-                noUiSlider.create(volumeSlider, {
-                    start: 1.00,
+                var volumeSlider#{index} = document.getElementById('modal-volume-slider-#{val.uid}')
+                var volumeDisplay#{index} = document.getElementById('modal-volume-value-#{val.uid}')
+                var volumeValue#{index} = document.getElementById('audio-#{val.uid}')
+                
+                noUiSlider.create(volumeSlider#{index}, {
+                    start: #{val.volume},
                     step: 0.01,
                     behaviour: 'drag',
                     connect: [true, false],
@@ -18,39 +24,42 @@
                     max: 1.00,
                     },
                 });
-                volumeSlider.noUiSlider.on('update', function(value, handle){
-                    volumeValue.innerHTML = value[handle];
+                volumeSlider#{index}.noUiSlider.on('update', function(value, handle){
+                    volumeDisplay#{index}.innerHTML = value[handle];
+                    volumeValue#{index}.volume = Number(value[handle]);
                 });
         </label>
         <br></br>
         <label>
             <span>Rate</span>
-            <div id="modal-rate-slider-#{index}"></div>
-            <span id="modal-rate-value-#{index}"></span>
+            <div id="modal-rate-slider-#{val.uid}"></div>
+            <span id="modal-rate-value-#{val.uid}"></span>
             script(type='text/javascript').
-                var rateSlider = document.getElementById('modal-rate-slider-#{index}')
-                var rateValue = document.getElementById('modal-rate-value-#{index}')
-                noUiSlider.create(rateSlider, {
-                    start: 1.00,
+                var rateSlider#{index} = document.getElementById('modal-rate-slider-#{val.uid}')
+                var rateDisplay#{index} = document.getElementById('modal-rate-value-#{val.uid}')
+                var rateValue#{index} = document.getElementById('audio-#{val.uid}')
+                noUiSlider.create(rateSlider#{index}, {
+                    start: #{val.rate},
                     step: 0.01,
                     behaviour: 'drag',
                     connect: [true, false],
                     range: {
-                    min: 0.00,
+                    min: 0.50,
                     max: 2.00,
                     },
                 });
-                rateSlider.noUiSlider.on('update', function(value, handle){
-                    rateValue.innerHTML = value[handle];
+                rateSlider#{index}.noUiSlider.on('update', function(value, handle){
+                    rateDisplay#{index}.innerHTML = value[handle];
+                    rateValue#{index}.playbackRate = Number(value[handle]);
                 });
         </label>
         <br></br>
-        <a id="modal-delete-item-#{index}" onclick="deleteEntry('#{index}')" class="btn blue-grey darken-1 waves-effect waves-light">Delete</a>
+        <a id="modal-delete-item-#{val.uid}" onclick="deleteEntry('#{val.uid}')" class="btn blue-grey darken-1 waves-effect waves-light">Delete</a>
     </div>
-    <div class="modal-footer" id="modal-footer-#{index}">
-        <a class="modal-action modal-close waves-effect waves-green btn-flat" href="#!" id="modal-action-#{index}">Save</a>
+    <div class="modal-footer" id="modal-footer-#{val.uid}">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="saveEntry('#{val.uid}')" href="#!" id="modal-action-#{val.uid}">Save</a>
     </div>
 </div>
 script(type='text/javascript').
-    var elem = document.getElementById('modal-#{index}');
+    var elem = document.getElementById('modal-#{val.uid}');
     M.Modal.init(elem, {});
