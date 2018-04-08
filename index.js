@@ -32,21 +32,11 @@ function print(arg) {
 
 function saveFiles(files) {
   const arr = [];
-
-  // object
   for (const file of files) {
     if (file.type.includes('audio/')) {
       arr.push(file.path);
     }
   }
-
-  // array
-  // files.forEach((file) => {
-  //   if (file.type.includes('audio/')) {
-  //     arr.push(file.path);
-  //   }
-  // });
-
   if (arr.length > 0) {
     ipcRenderer.send('saveFile', arr);
     refresh();
@@ -61,34 +51,6 @@ function submit() {
   console.log(files);
   saveFiles(files);
 }
-
-dragDrop('div.contain', {
-  onDrop(files, pos) {
-    console.log(files);
-    saveFiles(files);
-  },
-  onDragEnter() {
-    console.log('dragDrop.onDragEnter');
-    const elem = document.getElementById('modal-drag-drop');
-    M.Modal.init(elem, {});
-    const instance = M.Modal.getInstance(elem);
-    instance.open();
-  },
-  onDragOver() {
-    console.log('dragDrop.onDragOver');
-  },
-  onDragLeave() {
-    console.log('dragDrop.onDragLeave');
-    const elem = document.getElementById('modal-drag-drop');
-    const instance = M.Modal.getInstance(elem);
-
-    const cards = document.getElementById('cards');
-    console.log(cards);
-
-    // instance.close();
-    // instance.destroy();
-  },
-});
 
 function playPause(uid) {
   const element = document.getElementById(`audio-${uid}`);
@@ -110,8 +72,44 @@ function updateProgress(audio) {
   }
 }
 
+const cards = document.getElementById('cards');
 const sortable = Sortable.create(cards, {
   animation: 100,
   handle: '.material-icons left',
   group: 'cards',
+  onEnd(evt) {
+    const root = config.get();
+    const a = root.cards[evt.oldIndex];
+    root.cards[evt.oldIndex] = root.cards[evt.newIndex];
+    root.cards[evt.newIndex] = a;
+    config.set(root);
+  },
+});
+
+dragDrop('body', {
+  onDrop(files, pos) {
+    console.log(files);
+    saveFiles(files);
+  },
+  // onDragEnter() {
+  //   console.log('dragDrop.onDragEnter');
+  //   const elem = document.getElementById('modal-drag-drop');
+  //   M.Modal.init(elem, {});
+  //   const instance = M.Modal.getInstance(elem);
+  //   instance.open();
+  // },
+  // onDragOver() {
+  //   console.log('dragDrop.onDragOver');
+  // },
+  // onDragLeave() {
+  //   console.log('dragDrop.onDragLeave');
+  //   const elem = document.getElementById('modal-drag-drop');
+  //   const instance = M.Modal.getInstance(elem);
+
+  //   const cards = document.getElementById('cards');
+  //   console.log(cards);
+
+  //   // instance.close();
+  //   // instance.destroy();
+  // },
 });

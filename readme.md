@@ -24,18 +24,18 @@ $ npm run build-win
 
 ### TODO
 
-* Rename clips
-* image clips?
-* per clip color?
-* Add master volume controls?
-* Add per-clip volume/rate/delete/etc controls
-* Implement search
-* Retain reordered(drag and drop) list
-* Add clip directly from youtube links
-* multi-clip playable vs single clip only toggle?
-* * queue for clips clicked in single mode?
-* themes?
- 
+- [ ] Add clip directly from youtube links
+- [ ] Add master volume controls?
+- [ ] Add per-clip volume/rate/delete/etc controls
+- [ ] Implement search, per-clip CSV tags?
+- [ ] Per-clip color?
+- [ ] Per-clip images?
+- [ ] Rename clips
+- [x] Retain clip order
+- [ ] Themes?
+- [ ] multi-clip playable vs single clip only toggle?
+- - [ ] queue for clips clicked in single mode?
+
 ### License
 
 MIT

@@ -19,7 +19,6 @@ const pug = require('electron-pug')({
   config,
 });
 
-
 const {
   app,
   BrowserWindow,
