@@ -24,7 +24,6 @@ $ npm run build-win
 
 ### TODO
 
-* port to Angular
 * Add master volume controls
 * Add per-clip volume/rate/delete/etc controls
 * Implement search
