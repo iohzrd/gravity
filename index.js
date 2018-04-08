@@ -79,9 +79,9 @@ const sortable = Sortable.create(cards, {
   group: 'cards',
   onEnd(evt) {
     const root = config.get();
-    const a = root.cards[evt.oldIndex];
-    root.cards[evt.oldIndex] = root.cards[evt.newIndex];
-    root.cards[evt.newIndex] = a;
+    const z = root.cards[evt.oldIndex];
+    root.cards.splice(evt.oldIndex, 1);
+    root.cards.splice(evt.newIndex, 0, z);
     config.set(root);
   },
 });
