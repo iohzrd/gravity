@@ -12,41 +12,33 @@
   },
   "build": {
     "appId": "com.riskymcdanger.gravity",
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://example.com/updates"
-      }
-    ],
+    "publish": [{
+      "provider": "generic",
+      "url": "https://example.com/updates"
+    }],
     "linux": {
-      "target": [
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
+      "target": [{
+        "target": "deb",
+        "arch": [
+          "x64"
+        ]
+      }]
     },
     "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
+      "target": [{
+        "target": "dmg",
+        "arch": [
+          "x64"
+        ]
+      }]
     },
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
+      "target": [{
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }],
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
@@ -62,7 +54,7 @@
   "main": "main.js",
   "files": [
     "index.css",
-    "index.html",
+    "index.pug",
     "index.js",
     "main.js"
   ],
@@ -72,15 +64,18 @@
     "soundboard"
   ],
   "dependencies": {
-    "drag-drop": "^2.13.2",
+    "drag-drop": "^2.13.3",
     "electron-config": "^1.0.0",
-    "fs": "^0.0.1-security",
+    "electron-pug": "^1.5.1",
+    "ffmpeg-static": "^2.2.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs-extra": "^5.0.0",
     "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-beta",
     "nouislider": "^11.1.0",
     "sortablejs": "^1.7.0",
     "uuid": "^3.2.1",
-    "webpack": "^4.4.1"
+    "ytdl-core": "^0.20.2"
   },
   "devDependencies": {
     "electron": "^1.8.4",

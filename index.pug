@@ -1,0 +1,95 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="./index.css" rel="stylesheet">
+	<link href="./node_modules/materialize-css/dist/css/materialize.min.css" rel="stylesheet">
+	<link href="./node_modules/nouislider/distribute/nouislider.min.css" rel="stylesheet">
+	<script src="./node_modules/materialize-css/dist/js/materialize.min.js"></script>
+	<script src="./node_modules/nouislider/distribute/nouislider.min.js"></script>
+</head>
+
+<body class="black">
+	<div class="contain">
+		<div class="navbar-fixed">
+			<nav>
+				<div class="nav-wrapper">
+					<ul id="nav-mobile" class="left">
+						<li>
+							<a class="modal-trigger waves-effect waves-light btn-large" data-target="modal-select-input-type">Add</a>
+						</li>
+					</ul>
+					<a class="brand-logo center">gravity</a>
+					<ul id="nav-mobile" class="right">
+						<li>
+							<a class="waves-effect waves-light btn-large" onclick="ipcRenderer.send('quit')">Quit</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+
+		<div class="row" id="cards">
+			each val, index in config.store.cards
+				include card.pug
+		</div>
+
+		<div id="modals">
+			each val, index in config.store.cards
+				include modal.pug
+		</div>
+
+		<div id="modal-select-input-type" class="modal">
+			<form action="#">
+				<div class="modal-content center">
+					<p>
+					<label>
+						<input name="group1" type="radio" checked />
+						<span>File(s)</span>
+					</label>
+					</p>
+
+					<div class="file-field input-field">
+						<div class="btn">
+							<span>File</span>
+							<input type="file" multiple id="form-files">
+						</div>
+						<div class="file-path-wrapper">
+							<input class="file-path validate" type="text" placeholder="Upload one or more files">
+						</div>
+					</div>
+
+					<p>
+					<label>
+						<input name="group1" type="radio" />
+						<span>Youtube link</span>
+					</label>
+					</p>
+
+					<div class="input-field col s6">
+						<i class="material-icons prefix">link</i>
+						<input id="form-link" type="url" class="validate">
+						<label for="form-link">https://www.youtube.com/watch?v=dMniFQCyqTg</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="submit()">Submit</a>
+				</div>
+			</form>
+		</div>
+		script(type='text/javascript').
+			var modalSelectinputType = document.getElementById('modal-select-input-type');
+			M.Modal.init(modalSelectinputType, {});
+
+
+		<div id="modal-drag-drop" class="modal">
+			<div class="modal-content center">
+				<h4>Drop audio files</h4>
+			</div>
+		</div>
+
+	</div>
+	<script src="./index.js"></script>
+</body>
+
+</html>

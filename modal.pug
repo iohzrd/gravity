@@ -1,0 +1,56 @@
+<div class="modal" id="modal-#{index}">
+    <div class="modal-content" id="modal-content-#{index}">
+        <h4 id="modal-header-#{index}">#{val.name}</h4>
+        <label>
+            <span>Volume</span>
+            <div id="modal-volume-slider-#{index}"></div>
+            <span id="modal-volume-value-#{index}"></span>
+            script(type='text/javascript').
+                var volumeSlider = document.getElementById('modal-volume-slider-#{index}')
+                var volumeValue = document.getElementById('modal-volume-value-#{index}')
+                noUiSlider.create(volumeSlider, {
+                    start: 1.00,
+                    step: 0.01,
+                    behaviour: 'drag',
+                    connect: [true, false],
+                    range: {
+                    min: 0.00,
+                    max: 1.00,
+                    },
+                });
+                volumeSlider.noUiSlider.on('update', function(value, handle){
+                    volumeValue.innerHTML = value[handle];
+                });
+        </label>
+        <br></br>
+        <label>
+            <span>Rate</span>
+            <div id="modal-rate-slider-#{index}"></div>
+            <span id="modal-rate-value-#{index}"></span>
+            script(type='text/javascript').
+                var rateSlider = document.getElementById('modal-rate-slider-#{index}')
+                var rateValue = document.getElementById('modal-rate-value-#{index}')
+                noUiSlider.create(rateSlider, {
+                    start: 1.00,
+                    step: 0.01,
+                    behaviour: 'drag',
+                    connect: [true, false],
+                    range: {
+                    min: 0.00,
+                    max: 2.00,
+                    },
+                });
+                rateSlider.noUiSlider.on('update', function(value, handle){
+                    rateValue.innerHTML = value[handle];
+                });
+        </label>
+        <br></br>
+        <a id="modal-delete-item-#{index}" onclick="deleteEntry('#{index}')" class="btn blue-grey darken-1 waves-effect waves-light">Delete</a>
+    </div>
+    <div class="modal-footer" id="modal-footer-#{index}">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat" href="#!" id="modal-action-#{index}">Save</a>
+    </div>
+</div>
+script(type='text/javascript').
+    var elem = document.getElementById('modal-#{index}');
+    M.Modal.init(elem, {});

@@ -1,8 +1,25 @@
-const Config = require('electron-config');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const uuid = require('uuid/v4');
+const util = require('util');
+
+const Config = require('electron-config');
+
+const config = new Config();
+const root = config.get();
+if (root.cards === undefined) {
+  root.cards = [];
+  config.set(root);
+}
+
+const pug = require('electron-pug')({
+  pretty: true,
+}, {
+  config,
+});
+
+
 const {
   app,
   BrowserWindow,
@@ -11,7 +28,6 @@ const {
 } = require('electron');
 
 let mainWindow;
-const config = new Config();
 const configPath = path.dirname(config.path);
 const audioPath = `${configPath}/Audio`;
 if (!fs.existsSync(audioPath)) {
@@ -28,17 +44,14 @@ function saveFile(source) {
       const newPath = `${audioPath}/${uid}${ext}`;
       const rd = fs.createReadStream(singlePath);
       const wr = fs.createWriteStream(newPath);
-      const root = config.get();
-      if (root.files === undefined) {
-        root.files = {};
-      }
-      root.files[uid] = {
+      const element = {
         name: fileNameNoExt,
         path: newPath,
-        rate: 0.99,
+        rate: 1.00,
         uid,
-        volume: 0.99,
+        volume: 1.00,
       };
+      root.cards.push(element);
       if (rd.pipe(wr)) {
         config.set(root);
       }
@@ -56,7 +69,17 @@ function selectFile() {
   });
 }
 
-ipcMain.on('dragDropFiles', (event, arg) => {
+
+ipcMain.on('print', (event, arg) => {
+  console.log(`print event arg: ${arg}`);
+  console.log(util.inspect(arg, false, null));
+});
+
+ipcMain.on('refresh', () => {
+  mainWindow.webContents.reloadIgnoringCache();
+});
+
+ipcMain.on('saveFile', (event, arg) => {
   saveFile(arg);
 });
 
@@ -75,7 +98,11 @@ app.on('ready', () => {
     height: 1080,
     frame: false,
   });
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'index.pug'),
+    protocol: 'file:',
+    slashes: true,
+  }));
   mainWindow.webContents.openDevTools();
 });
 

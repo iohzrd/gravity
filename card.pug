@@ -1,0 +1,13 @@
+<div class="col s2" id="col-#{index}">
+    <div class="card blue-grey darken-1" id="card-#{index}">
+        <a id="modal-handle"  class="material-icons left">open_with</a>
+        <a id="modal-trigger-#{index}" class="material-icons right modal-trigger" data-target="modal-#{index}">settings</a>
+        <div class="card-content white-text" id="card-content-#{index}" onclick="playPause('#{index}')">
+            <audio src="#{val.path}" id="audio-#{index}" ontimeupdate="updateProgress(this)" ></audio>
+            <span class="card-title" id="card-title-#{index}">#{val.name}</span>
+        </div>
+        <div class="progress" id="progress-#{index}">
+            <div id="determinate-#{index}" class="determinate" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
