@@ -53,10 +53,12 @@
   },
   "main": "main.js",
   "files": [
+    "card.pug",
     "index.css",
-    "index.pug",
     "index.js",
-    "main.js"
+    "index.pug",
+    "main.js",
+    "modal.pug"
   ],
   "keywords": [
     "audio",

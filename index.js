@@ -12,18 +12,18 @@ function refresh() {
   ipcRenderer.send('refresh');
 }
 
-function deleteEntry(uid) {
-  if (config.has(uid)) {
-    config.delete(uid);
-    const col = document.getElementById(`col-${uid}`);
-    col.parentNode.removeChild(col);
-    const modal = document.getElementById(`modal-${uid}`);
-    const instance = M.Modal.getInstance(modal);
-    instance.close();
-    instance.destroy();
-    modal.parentNode.removeChild(modal);
-    // refresh();
-  }
+function deleteEntry(index) {
+  const root = config.get();
+  root.cards.splice(index, 1);
+  config.set(root);
+  const col = document.getElementById(`col-${index}`);
+  col.parentNode.removeChild(col);
+  const modal = document.getElementById(`modal-${index}`);
+  const instance = M.Modal.getInstance(modal);
+  instance.close();
+  instance.destroy();
+  modal.parentNode.removeChild(modal);
+  refresh();
 }
 
 function print(arg) {
