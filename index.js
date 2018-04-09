@@ -62,7 +62,6 @@ function saveFiles(files) {
   }
 }
 
-
 function submit() {
   // const link = document.getElementById('form-link').value;
   // console.log(link);

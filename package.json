@@ -12,33 +12,41 @@
   },
   "build": {
     "appId": "com.riskymcdanger.gravity",
-    "publish": [{
-      "provider": "generic",
-      "url": "https://example.com/updates"
-    }],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://example.com/updates"
+      }
+    ],
     "linux": {
-      "target": [{
-        "target": "deb",
-        "arch": [
-          "x64"
-        ]
-      }]
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     },
     "mac": {
-      "target": [{
-        "target": "dmg",
-        "arch": [
-          "x64"
-        ]
-      }]
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     },
     "win": {
-      "target": [{
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
@@ -76,7 +84,6 @@
     "materialize-css": "^1.0.0-beta",
     "nouislider": "^11.1.0",
     "sortablejs": "^1.7.0",
-    "uuid": "^3.2.1",
     "ytdl-core": "^0.20.2"
   },
   "devDependencies": {

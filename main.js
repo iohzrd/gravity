@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
-const uuid = require('uuid/v4');
 const util = require('util');
 
 const Config = require('electron-config');
@@ -33,10 +32,21 @@ if (!fs.existsSync(audioPath)) {
   fs.mkdirSync(audioPath);
 }
 
+function uuid(length) {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return text;
+}
+
 function saveFile(source) {
   if (source && source.length > 0) {
     source.forEach(singlePath => new Promise((() => {
-      const uid = uuid();
+      const uid = uuid(8);
       const fileName = path.basename(singlePath);
       const ext = path.extname(singlePath);
       const fileNameNoExt = fileName.substring(0, fileName.lastIndexOf('.'));

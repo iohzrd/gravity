@@ -1,7 +1,7 @@
 @font-face {
 	font-family: 'Material Icons';
 	font-style: normal;
-	font-weight: 400;
+	font-weight: 200;
 	src: url(./node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff2) format('woff2');
 }
 
@@ -9,7 +9,7 @@
 	font-family: 'Material Icons';
 	font-weight: normal;
 	font-style: normal;
-	font-size: 24px;
+	font-size: 20px;
 	line-height: 1;
 	letter-spacing: normal;
 	text-transform: none;
@@ -19,4 +19,8 @@
 	direction: ltr;
 	-webkit-font-feature-settings: 'liga';
 	-webkit-font-smoothing: antialiased;
+}
+
+.col .card .card-content {
+	height: 16%;
 }

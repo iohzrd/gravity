@@ -27,13 +27,13 @@ script(type='text/javascript').
     var elem = document.getElementById('modal-#{val.uid}');
     M.Modal.init(elem, {});
 
-    var audio#{index} = document.getElementById('audio-#{val.uid}')
-    var rateDisplay#{index} = document.getElementById('modal-rate-value-#{val.uid}')
-    var rateSlider#{index} = document.getElementById('modal-rate-slider-#{val.uid}')
-    var volumeDisplay#{index} = document.getElementById('modal-volume-value-#{val.uid}')
-    var volumeSlider#{index} = document.getElementById('modal-volume-slider-#{val.uid}')
+    var audio#{val.uid} = document.getElementById('audio-#{val.uid}')
+    var rateDisplay#{val.uid} = document.getElementById('modal-rate-value-#{val.uid}')
+    var rateSlider#{val.uid} = document.getElementById('modal-rate-slider-#{val.uid}')
+    var volumeDisplay#{val.uid} = document.getElementById('modal-volume-value-#{val.uid}')
+    var volumeSlider#{val.uid} = document.getElementById('modal-volume-slider-#{val.uid}')
 
-    noUiSlider.create(rateSlider#{index}, {
+    noUiSlider.create(rateSlider#{val.uid}, {
         start: #{val.rate},
         step: 0.01,
         behaviour: 'drag',
@@ -43,12 +43,12 @@ script(type='text/javascript').
         max: 2.00,
         },
     });
-    rateSlider#{index}.noUiSlider.on('update', function(value, handle){
-        rateDisplay#{index}.innerHTML = value[handle];
-        audio#{index}.playbackRate = Number(value[handle]);
+    rateSlider#{val.uid}.noUiSlider.on('update', function(value, handle){
+        rateDisplay#{val.uid}.innerHTML = value[handle];
+        audio#{val.uid}.playbackRate = Number(value[handle]);
     });
 
-    noUiSlider.create(volumeSlider#{index}, {
+    noUiSlider.create(volumeSlider#{val.uid}, {
         start: #{val.volume},
         step: 0.01,
         behaviour: 'drag',
@@ -58,7 +58,7 @@ script(type='text/javascript').
         max: 1.00,
         },
     });
-    volumeSlider#{index}.noUiSlider.on('update', function(value, handle){
-        volumeDisplay#{index}.innerHTML = value[handle];
-        audio#{index}.volume = Number(value[handle]);
+    volumeSlider#{val.uid}.noUiSlider.on('update', function(value, handle){
+        volumeDisplay#{val.uid}.innerHTML = value[handle];
+        audio#{val.uid}.volume = Number(value[handle]);
     });

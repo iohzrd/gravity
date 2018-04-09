@@ -1,10 +1,10 @@
 <div class="col s2" id="col-#{val.uid}">
     <div class="card blue-grey darken-1" id="card-#{val.uid}">
-        <audio id="audio-#{val.uid}" src="#{val.path}" ontimeupdate="updateProgress(this)" ></audio>
         <a id="modal-handle"  class="material-icons left">open_with</a>
         <a id="modal-trigger-#{val.uid}" class="material-icons right modal-trigger" data-target="modal-#{val.uid}">settings</a>
         <div class="card-content white-text" id="card-content-#{val.uid}" onclick="playPause('#{val.uid}')">
             <span class="card-title" id="card-title-#{val.uid}">#{val.name}</span>
+            <audio id="audio-#{val.uid}" src="#{val.path}" ontimeupdate="updateProgress(this)" ></audio>
         </div>
         <div class="progress" id="progress-#{val.uid}">
             <div id="determinate-#{val.uid}" class="determinate" style="width: 0%;"></div>
