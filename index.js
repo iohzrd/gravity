@@ -1,30 +1,51 @@
-const Sortable = require('sortablejs');
 const dragDrop = require('drag-drop');
-const Store = require('electron-config');
+const electronConfig = require('electron-config');
+const ffmpeg = require('ffmpeg-binaries');
+const fileType = require('file-type');
+const fluent = require('fluent-ffmpeg');
+const fs = require('fs-extra');
+const path = require('path');
+const readChunk = require('read-chunk');
+const sanitize = require('sanitize-filename');
+const sortableJs = require('sortablejs');
+const ytdl = require('ytdl-core');
 const {
   ipcRenderer,
   remote,
 } = require('electron');
 
-const config = new Store();
+const config = new electronConfig();
+const configPath = path.dirname(config.path);
+const tempPath = `${configPath}/Temp`;
+if (!fs.existsSync(tempPath)) {
+  fs.mkdirSync(tempPath);
+}
+
 
 function refresh() {
   ipcRenderer.send('refresh');
 }
 
-function deleteEntry(index) {
+function deleteEntry(uid) {
   const root = config.get();
-  root.cards.splice(index, 1);
+  for (let i = 0; i < root.cards.length; i++) {
+    const card = root.cards[i];
+    if (card.uid === uid) {
+      fs.unlinkSync(card.path);
+      root.cards.splice(i, 1);
+    }
+  }
   config.set(root);
-  const col = document.getElementById(`col-${index}`);
+  const col = document.getElementById(`col-${uid}`);
   col.parentNode.removeChild(col);
-  const modal = document.getElementById(`modal-${index}`);
+  const modal = document.getElementById(`modal-${uid}`);
   const instance = M.Modal.getInstance(modal);
   instance.close();
   instance.destroy();
   modal.parentNode.removeChild(modal);
   refresh();
 }
+
 
 function saveEntry(uid) {
   console.log(uid);
@@ -45,30 +66,110 @@ function saveEntry(uid) {
   config.set(root);
 }
 
-function print(arg) {
-  ipcRenderer.send('print', arg);
-}
-
 function saveFiles(files) {
   const arr = [];
-  for (const file of files) {
-    if (file.type.includes('audio/')) {
-      arr.push(file.path);
+  files.forEach((file) => {
+    const buffer = fileType(readChunk.sync(file, 0, 4100));
+    console.log(buffer);
+    if (buffer.mime.includes('audio/')) {
+      if (file.path) {
+        arr.push(file.path);
+      } else {
+        arr.push(file);
+      }
     }
-  }
+  });
   if (arr.length > 0) {
     ipcRenderer.send('saveFile', arr);
     refresh();
   }
 }
 
-function submit() {
-  // const link = document.getElementById('form-link').value;
-  // console.log(link);
-  const files = document.getElementById('form-files').files;
-  console.log(files);
-  saveFiles(files);
+async function updateTimeSlider(input) {
+  try {
+    const videoMeta = await ytdl.getInfo(input.value);
+    const slider = document.getElementById('form-link-slider');
+    noUiSlider.create(slider, {
+      start: [0, videoMeta.length_seconds],
+      connect: true,
+      step: 1,
+      orientation: 'horizontal', // 'horizontal' or 'vertical'
+      range: {
+        min: 0,
+        max: Number(videoMeta.length_seconds),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
+
+async function startDownload(id) {
+  const progressBar = document.getElementById('form-link-progress');
+
+  try {
+    const info = await ytdl.getInfo(id);
+    console.log(info);
+    const paths = await new Promise((resolve, reject) => {
+      const fullPath = path.join(tempPath, 'tmp.mp4');
+      const videoObject = ytdl(id, {
+        // filter: 'audioonly',
+      });
+      videoObject
+        .on('progress', (chunkLength, downloaded, total) => {
+          progressBar.style = `width: ${Math.floor((downloaded / total) * 49)}%`;
+        });
+
+      videoObject
+        .pipe(fs.createWriteStream(fullPath))
+        .on('finish', () => {
+          progressBar.style = 'width: 50%';
+          setTimeout(() => {
+            resolve({
+              filePath: fullPath,
+              folderPath: tempPath,
+              fileTitle: `${info.title}.mp3`,
+            });
+          }, 1000);
+        });
+    });
+
+    await new Promise((resolve, reject) => {
+      fluent(paths.filePath)
+        .setFfmpegPath(ffmpeg.ffmpegPath())
+        .format('mp3')
+        .audioBitrate(192)
+        .on('progress', (progress) => {
+          progressBar.style = `width: ${50 + Math.floor(progress.percent / 2)}%`;
+        })
+        .output(fs.createWriteStream(path.join(paths.folderPath, sanitize(paths.fileTitle))))
+        .on('end', () => {
+          progressBar.style = 'width: 100%';
+          resolve();
+        })
+        .run();
+    });
+
+    saveFiles([path.join(paths.folderPath, paths.fileTitle)]);
+    fs.unlinkSync(paths.filePath);
+    fs.unlinkSync(path.join(paths.folderPath, paths.fileTitle));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+function submit() {
+  if (document.getElementById('form-link').disabled) {
+    saveFiles(document.getElementById('form-files').files);
+  } else {
+    startDownload(document.getElementById('form-link').value);
+  }
+  // const modal = document.getElementById('modal-select-input-type');
+  // const instance = M.Modal.getInstance(modal);
+  //   instance.close();
+}
+
 
 function playPause(uid) {
   const element = document.getElementById(`audio-${uid}`);
@@ -90,8 +191,9 @@ function updateProgress(audio) {
   }
 }
 
+
 const cards = document.getElementById('cards');
-const sortable = Sortable.create(cards, {
+const sortable = sortableJs.create(cards, {
   animation: 100,
   handle: '.material-icons left',
   group: 'cards',
@@ -103,6 +205,7 @@ const sortable = Sortable.create(cards, {
     config.set(root);
   },
 });
+
 
 dragDrop('body', {
   onDrop(files, pos) {

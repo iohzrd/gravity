@@ -1,0 +1,59 @@
+<div id="modal-select-input-type" class="modal">
+    <form action="#">
+        <div class="modal-content center">
+            <p>
+                <label>
+                    <input id="fileRadio" class="with-gap" name="group1" type="radio" checked />
+                    <span>File(s)</span>
+                </label>
+                <label>
+                    <input id="linkRadio" class="with-gap" name="group1" type="radio"/>
+                    <span>Youtube link</span>
+                </label>
+            </p>
+
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>File</span>
+                    <input id="form-files" type="file" multiple>
+                </div>
+                <div class="file-path-wrapper">
+                    <input id="form-files-wrapper" class="file-path validate" type="text" placeholder="Import one or more files">
+                </div>
+            </div>
+
+            <br></br>
+
+            <div class="input-field col s6">
+                <i class="material-icons prefix">link</i>
+                <input id="form-link" type="url" class="validate" oninput="updateTimeSlider(this)" disabled>
+                <label for="form-link">https://www.youtube.com/watch?v=dMniFQCyqTg</label>
+            </div>
+
+            <div id="form-link-slider"></div>
+
+            <div class="progress">
+                <div id="form-link-progress" class="determinate" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="submit" class="waves-effect waves-green btn-flat" onclick="submit()">Submit</a>
+        </div>
+    </form>
+</div>
+script(type='text/javascript').
+    var modalSelectinputType = document.getElementById('modal-select-input-type');
+    M.Modal.init(modalSelectinputType, {});
+
+    var fileRadio = document.getElementById('fileRadio');
+    var linkRadio = document.getElementById('linkRadio');
+    fileRadio.addEventListener("click", function(){
+        document.getElementById('form-files').disabled = false;
+        document.getElementById('form-files-wrapper').disabled = false;
+        document.getElementById('form-link').disabled = true;
+    }, false);
+    linkRadio.addEventListener("click", function(){
+        document.getElementById('form-files').disabled = true;
+        document.getElementById('form-files-wrapper').disabled = true;
+        document.getElementById('form-link').disabled = false;
+    }, false);

@@ -2,6 +2,9 @@
 
 <head>
 	<meta charset="utf-8">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+	
 	<link href="./index.css" rel="stylesheet">
 	<link href="./node_modules/materialize-css/dist/css/materialize.min.css" rel="stylesheet">
 	<link href="./node_modules/nouislider/distribute/nouislider.min.css" rel="stylesheet">
@@ -16,6 +19,7 @@
 				<ul id="nav-mobile" class="left">
 					<li>
 						<a class="modal-trigger waves-effect waves-light btn-large" data-target="modal-select-input-type">Add</a>
+						include add.pug
 					</li>
 				</ul>
 				<a class="brand-logo center">gravity</a>
@@ -28,50 +32,7 @@
 		</nav>
 	</div>
 
-	<div id="modal-select-input-type" class="modal">
-		<form action="#">
-			<div class="modal-content center">
-				<p>
-					<label>
-						<input name="group1" type="radio" checked />
-						<span>File(s)</span>
-					</label>
-				</p>
-
-				<div class="file-field input-field">
-					<div class="btn">
-						<span>File</span>
-						<input type="file" multiple id="form-files">
-					</div>
-					<div class="file-path-wrapper">
-						<input class="file-path validate" type="text" placeholder="Upload one or more files">
-					</div>
-				</div>
-
-				<p>
-					<label>
-						<input name="group1" type="radio" />
-						<span>Youtube link</span>
-					</label>
-				</p>
-
-				<div class="input-field col s6">
-					<i class="material-icons prefix">link</i>
-					<input id="form-link" type="url" class="validate">
-					<label for="form-link">https://www.youtube.com/watch?v=dMniFQCyqTg</label>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" onclick="submit()">Submit</a>
-			</div>
-		</form>
-	</div>
-	script(type='text/javascript').
-		var modalSelectinputType = document.getElementById('modal-select-input-type');
-		M.Modal.init(modalSelectinputType, {});
-
-
-
+	
 	<div class="contain" id="contain">
 		<div class="row" id="cards">
 			each val, index in config.store.cards
@@ -83,8 +44,6 @@
 				include modal.pug
 		</div>
 	</div>
-
-
 
 	<div id="modal-drag-drop" class="modal">
 		<div class="modal-content center">

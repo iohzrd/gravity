@@ -1,16 +1,15 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const url = require('url');
-const util = require('util');
+const electronConfig = require('electron-config');
 
-const Config = require('electron-config');
-
-const config = new Config();
+const config = new electronConfig();
 const root = config.get();
 if (root.cards === undefined) {
   root.cards = [];
   config.set(root);
 }
+
 
 const pug = require('electron-pug')({
   pretty: true,
@@ -31,6 +30,7 @@ const audioPath = `${configPath}/Audio`;
 if (!fs.existsSync(audioPath)) {
   fs.mkdirSync(audioPath);
 }
+
 
 function uuid(length) {
   let text = '';
@@ -78,11 +78,6 @@ function selectFile() {
   });
 }
 
-
-ipcMain.on('print', (event, arg) => {
-  console.log(`print event arg: ${arg}`);
-  console.log(util.inspect(arg, false, null));
-});
 
 ipcMain.on('refresh', () => {
   mainWindow.webContents.reloadIgnoringCache();
