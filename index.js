@@ -26,6 +26,27 @@ function refresh() {
   ipcRenderer.send('refresh');
 }
 
+function toHHMMSS(seconds) {
+  const date = new Date(seconds * 1000);
+  let hh = date.getUTCHours();
+  let mm = date.getUTCMinutes();
+  let ss = date.getSeconds();
+  // If you were building a timestamp instead of a duration, you would uncomment the following line to get 12-hour (not 24) time
+  // if (hh > 12) {hh = hh % 12;}
+  // These lines ensure you have two-digits
+  if (hh < 10) {
+    hh = `0${hh}`;
+  }
+  if (mm < 10) {
+    mm = `0${mm}`;
+  }
+  if (ss < 10) {
+    ss = `0${ss}`;
+  }
+  // This formats your string to HH:MM:SS
+  return `${hh}:${mm}:${ss}`;
+}
+
 function deleteEntry(uid) {
   const root = config.get();
   for (let i = 0; i < root.cards.length; i++) {
@@ -89,8 +110,9 @@ async function updateTimeSlider(input) {
   try {
     const videoMeta = await ytdl.getInfo(input.value);
     const slider = document.getElementById('form-link-slider');
+
     noUiSlider.create(slider, {
-      start: [0, videoMeta.length_seconds],
+      start: [0, Number(videoMeta.length_seconds)],
       connect: true,
       step: 1,
       orientation: 'horizontal', // 'horizontal' or 'vertical'
@@ -99,6 +121,13 @@ async function updateTimeSlider(input) {
         max: Number(videoMeta.length_seconds),
       },
     });
+
+    slider.noUiSlider.on('update', (values, handle) => {
+      document.getElementById('form-link-slider-start').innerHTML = toHHMMSS(values[0]);
+      document.getElementById('form-link-slider-start-seconds').innerHTML = values[0];
+      document.getElementById('form-link-slider-end').innerHTML = toHHMMSS(values[1]);
+      document.getElementById('form-link-slider-end-seconds').innerHTML = values[1];
+    });
   } catch (error) {
     console.log(error);
   }
@@ -106,6 +135,9 @@ async function updateTimeSlider(input) {
 
 async function startDownload(id) {
   const progressBar = document.getElementById('form-link-progress');
+  const start = document.getElementById('form-link-slider-start-seconds').innerHTML;
+  const endTime = document.getElementById('form-link-slider-end-seconds').innerHTML;
+  const duration = Number(endTime) - Number(start);
 
   try {
     const info = await ytdl.getInfo(id);
@@ -136,6 +168,8 @@ async function startDownload(id) {
 
     await new Promise((resolve, reject) => {
       fluent(paths.filePath)
+        .setStartTime(start)
+        .setDuration(duration)
         .setFfmpegPath(ffmpeg.ffmpegPath())
         .format('mp3')
         .audioBitrate(192)
