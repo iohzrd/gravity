@@ -116,22 +116,17 @@ async function updateTimeSlider(input) {
     const slider = document.getElementById('form-link-slider');
 
     if (!slider.noUiSlider) {
-      console.log('no slider');
       noUiSlider.create(slider, {
         start: [0, Number(videoMeta.length_seconds)],
-        connect: true,
         step: 1,
-        orientation: 'horizontal', // 'horizontal' or 'vertical'
         range: {
           min: 0,
           max: Number(videoMeta.length_seconds),
         },
       });
     } else {
-      console.log('slider');
       slider.noUiSlider.updateOptions({
         start: [0, Number(videoMeta.length_seconds)],
-        step: 1,
         range: {
           min: 0,
           max: Number(videoMeta.length_seconds),

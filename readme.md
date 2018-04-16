@@ -37,7 +37,7 @@ $ npm run build-win
 - [ ] Themes?
 - [ ] multi-clip playable vs single clip only toggle?
 - - [ ] queue for clips clicked in single mode?
-- [ ] refactor
+- [x] refactor
 - [ ] refactor
 - [ ] refactor
 
