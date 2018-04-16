@@ -1,7 +1,7 @@
 {
   "name": "gravity",
   "productName": "Gravity",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "a modern soundboard app for dank drops",
   "license": "MIT",
   "repository": "RiskyMcdanger/gravity",
@@ -12,6 +12,7 @@
   },
   "build": {
     "appId": "com.riskymcdanger.gravity",
+    "asarUnpack": "**/node_modules/ffmpeg-binaries/**/*",
     "publish": [
       {
         "provider": "generic",
@@ -61,6 +62,7 @@
   },
   "main": "main.js",
   "files": [
+    "add.pug",
     "card.pug",
     "index.css",
     "index.js",
@@ -74,16 +76,18 @@
     "soundboard"
   ],
   "dependencies": {
-    "drag-drop": "^2.13.3",
+    "drag-drop": "^3.0.0",
     "electron-config": "^1.0.0",
     "electron-pug": "^1.5.1",
     "ffmpeg-binaries": "^3.2.2-3",
     "file-type": "^7.6.0",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^5.0.0",
+    "hazardous": "^0.3.0",
     "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-beta",
     "nouislider": "^11.1.0",
+    "npm": "^5.8.0",
     "read-chunk": "^2.1.0",
     "sanitize-filename": "^1.6.1",
     "sortablejs": "^1.7.0",
@@ -94,6 +98,6 @@
     "electron-builder": "^20.8.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.10.0"
+    "eslint-plugin-import": "^2.11.0"
   }
 }

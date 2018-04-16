@@ -1,12 +1,7 @@
 const dragDrop = require('drag-drop');
 const electronConfig = require('electron-config');
-const ffmpeg = require('ffmpeg-binaries');
-const fileType = require('file-type');
-const fluent = require('fluent-ffmpeg');
 const fs = require('fs-extra');
 const path = require('path');
-const readChunk = require('read-chunk');
-const sanitize = require('sanitize-filename');
 const sortableJs = require('sortablejs');
 const ytdl = require('ytdl-core');
 const {
@@ -31,9 +26,6 @@ function toHHMMSS(seconds) {
   let hh = date.getUTCHours();
   let mm = date.getUTCMinutes();
   let ss = date.getSeconds();
-  // If you were building a timestamp instead of a duration, you would uncomment the following line to get 12-hour (not 24) time
-  // if (hh > 12) {hh = hh % 12;}
-  // These lines ensure you have two-digits
   if (hh < 10) {
     hh = `0${hh}`;
   }
@@ -43,16 +35,20 @@ function toHHMMSS(seconds) {
   if (ss < 10) {
     ss = `0${ss}`;
   }
-  // This formats your string to HH:MM:SS
   return `${hh}:${mm}:${ss}`;
 }
 
 function deleteEntry(uid) {
   const root = config.get();
+
   for (let i = 0; i < root.cards.length; i++) {
     const card = root.cards[i];
     if (card.uid === uid) {
-      fs.unlinkSync(card.path);
+      try {
+        fs.unlinkSync(card.path);
+      } catch (error) {
+        console.log('File missing.');
+      }
       root.cards.splice(i, 1);
     }
   }
@@ -88,18 +84,26 @@ function saveEntry(uid) {
 }
 
 function saveFiles(files) {
+  const fileType = require('file-type');
+  const readChunk = require('read-chunk');
   const arr = [];
-  files.forEach((file) => {
-    const buffer = fileType(readChunk.sync(file, 0, 4100));
-    console.log(buffer);
-    if (buffer.mime.includes('audio/')) {
-      if (file.path) {
-        arr.push(file.path);
-      } else {
+  console.log(files);
+
+  for (let index = 0; index < files.length; index++) {
+    const file = files[index];
+    console.log(file.path);
+    if (file.path) {
+      console.log(file.path);
+      arr.push(file.path);
+    } else {
+      const buffer = fileType(readChunk.sync(file, 0, 4100));
+      console.log(buffer);
+      if (buffer.mime.includes('audio/')) {
         arr.push(file);
       }
     }
-  });
+  }
+
   if (arr.length > 0) {
     ipcRenderer.send('saveFile', arr);
     refresh();
@@ -111,16 +115,29 @@ async function updateTimeSlider(input) {
     const videoMeta = await ytdl.getInfo(input.value);
     const slider = document.getElementById('form-link-slider');
 
-    noUiSlider.create(slider, {
-      start: [0, Number(videoMeta.length_seconds)],
-      connect: true,
-      step: 1,
-      orientation: 'horizontal', // 'horizontal' or 'vertical'
-      range: {
-        min: 0,
-        max: Number(videoMeta.length_seconds),
-      },
-    });
+    if (!slider.noUiSlider) {
+      console.log('no slider');
+      noUiSlider.create(slider, {
+        start: [0, Number(videoMeta.length_seconds)],
+        connect: true,
+        step: 1,
+        orientation: 'horizontal', // 'horizontal' or 'vertical'
+        range: {
+          min: 0,
+          max: Number(videoMeta.length_seconds),
+        },
+      });
+    } else {
+      console.log('slider');
+      slider.noUiSlider.updateOptions({
+        start: [0, Number(videoMeta.length_seconds)],
+        step: 1,
+        range: {
+          min: 0,
+          max: Number(videoMeta.length_seconds),
+        },
+      });
+    }
 
     slider.noUiSlider.on('update', (values, handle) => {
       document.getElementById('form-link-slider-start').innerHTML = toHHMMSS(values[0]);
@@ -134,6 +151,9 @@ async function updateTimeSlider(input) {
 }
 
 async function startDownload(id) {
+  const ffmpeg = require('ffmpeg-binaries');
+  const fluent = require('fluent-ffmpeg');
+  const sanitize = require('sanitize-filename');
   const progressBar = document.getElementById('form-link-progress');
   const start = document.getElementById('form-link-slider-start-seconds').innerHTML;
   const endTime = document.getElementById('form-link-slider-end-seconds').innerHTML;
@@ -166,7 +186,9 @@ async function startDownload(id) {
         });
     });
 
+    require('hazardous');
     await new Promise((resolve, reject) => {
+      ffmpeg.ffmpegPath();
       fluent(paths.filePath)
         .setStartTime(start)
         .setDuration(duration)
