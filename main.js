@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const url = require('url');
-const electronConfig = require('electron-config');
+const ElectronConfig = require('electron-config');
 
-const config = new electronConfig();
+const config = new ElectronConfig();
 const root = config.get();
 if (root.cards === undefined) {
   root.cards = [];
